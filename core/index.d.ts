@@ -1000,8 +1000,6 @@ export type EmbeddingsProviderName =
   | "continue-proxy"
   | "deepinfra"
   | "nvidia"
-  | "1min"
-  | "1min"
   | "voyage"
   | "mistral"
   | "nebius"
