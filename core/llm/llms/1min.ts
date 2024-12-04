@@ -58,8 +58,8 @@ interface ChatOptions extends BaseOptions {
   // And correspondingly, tool calls in OllamaChatMessage
 }
 
-class Ollama extends BaseLLM {
-  static providerName: ModelProvider = "ollama";
+class MinAi extends BaseLLM {
+  static providerName: ModelProvider = "1min";
   static defaultOptions: Partial<LLMOptions> = {
     apiBase: "http://localhost:11434/",
     model: "codellama-7b",
@@ -291,7 +291,7 @@ class Ollama extends BaseLLM {
               throw new Error(j.error);
             }
           } catch (e) {
-            throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
+            throw new Error(`Error parsing 1min response: ${e} ${chunk}`);
           }
         }
       }
@@ -335,7 +335,7 @@ class Ollama extends BaseLLM {
               throw new Error(j.error);
             }
           } catch (e) {
-            throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
+            throw new Error(`Error parsing 1min response: ${e} ${chunk}`);
           }
         }
       }
@@ -381,7 +381,7 @@ class Ollama extends BaseLLM {
               throw new Error(j.error);
             }
           } catch (e) {
-            throw new Error(`Error parsing Ollama response: ${e} ${chunk}`);
+            throw new Error(`Error parsing 1min response: ${e} ${chunk}`);
           }
         }
       }
@@ -401,10 +401,10 @@ class Ollama extends BaseLLM {
       return data.models.map((model: any) => model.name);
     } else {
       throw new Error(
-        "Failed to list Ollama models. Make sure Ollama is running.",
+        "Failed to list Ollama models. Make sure 1min is running.",
       );
     }
   }
 }
 
-export default Ollama;
+export default MinAi;
