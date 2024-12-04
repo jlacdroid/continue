@@ -36,6 +36,7 @@ import Moonshot from "./Moonshot";
 import Msty from "./Msty";
 import Nebius from "./Nebius";
 import Nvidia from "./Nvidia";
+import OneMin from "./OneMinAi";
 import Ollama from "./Ollama";
 import OpenAI from "./OpenAI";
 import OpenRouter from "./OpenRouter";
@@ -85,6 +86,7 @@ const LLMs = [
   WatsonX,
   OpenRouter,
   Nvidia,
+  OneMin,
   Vllm,
   SambaNova,
   Mock,

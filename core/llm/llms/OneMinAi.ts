@@ -70,11 +70,10 @@ interface ChatOptions extends BaseOptions {
   // And correspondingly, tool calls in OllamaChatMessage
 }
 
-class MinAi extends BaseLLM {
+class OneMinAi extends BaseLLM {
   static providerName: ModelProvider = "1min";
   static defaultOptions: Partial<LLMOptions> = {
-    apiBase: "http://localhost:11434/",
-    model: "codellama-7b",
+    apiBase: "https://api.1min.ai",
   };
 
   private fimSupported: boolean = false;
@@ -426,4 +425,4 @@ class MinAi extends BaseLLM {
   }
 }
 
-export default MinAi;
+export default OneMinAi;
