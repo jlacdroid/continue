@@ -592,6 +592,7 @@ declare global {
     | "deepinfra"
     | "flowise"
     | "groq"
+    | "1min"
     | "continue-proxy"
     | "fireworks"
     | "custom"
