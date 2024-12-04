@@ -1,3 +1,4 @@
+import { t } from "tar";
 import {
   ChatMessage,
   CompletionOptions,
@@ -33,27 +34,38 @@ interface ModelFileParams {
   num_gpu?: number;
 }
 
+interface ModelpromptObject {
+  prompt: string;
+  isMixed: boolean;
+  webSearch: boolean;
+  numOfSite: number;
+  maxWord: number;
+}
+
 // See https://github.com/ollama/ollama/blob/main/docs/api.md
 interface BaseOptions {
-  model: string; // the model name
+  type?: string;
+  model?: string; // the model name
+  promptObject?: ModelpromptObject;
   options?: ModelFileParams; // additional model parameters listed in the documentation for the Modelfile such as temperature
-  format?: "json"; // the format to return a response in. Currently, the only accepted value is json
-  stream?: boolean; // if false the response will be returned as a single response object, rather than a stream of objects
-  keep_alive?: number; // controls how long the model will stay loaded into memory following the request (default: 5m)
+  // format?: "json"; // the format to return a response in. Currently, the only accepted value is json
+  // stream?: boolean; // if false the response will be returned as a single response object, rather than a stream of objects
+  // keep_alive?: number; // controls how long the model will stay loaded into memory following the request (default: 5m)
 }
 
 interface GenerateOptions extends BaseOptions {
   prompt: string; // the prompt to generate a response for
-  suffix?: string; // the text after the model response
-  images?: string[]; // a list of base64-encoded images (for multimodal models such as llava)
-  system?: string; // system message to (overrides what is defined in the Modelfile)
-  template?: string; // the prompt template to use (overrides what is defined in the Modelfile)
-  context?: string; // the context parameter returned from a previous request to /generate, this can be used to keep a short conversational memory
-  raw?: boolean; // if true no formatting will be applied to the prompt. You may choose to use the raw parameter if you are specifying a full templated prompt in your request to the API
+  // suffix?: string; // the text after the model response
+  // images?: string[]; // a list of base64-encoded images (for multimodal models such as llava)
+  // system?: string; // system message to (overrides what is defined in the Modelfile)
+  // template?: string; // the prompt template to use (overrides what is defined in the Modelfile)
+  // context?: string; // the context parameter returned from a previous request to /generate, this can be used to keep a short conversational memory
+  // raw?: boolean; // if true no formatting will be applied to the prompt. You may choose to use the raw parameter if you are specifying a full templated prompt in your request to the API
+  
 }
 
 interface ChatOptions extends BaseOptions {
-  messages: OllamaChatMessage[]; // the messages of the chat, this can be used to keep a chat memory
+  // messages: OllamaChatMessage[]; // the messages of the chat, this can be used to keep a chat memory
   // Not supported yet - tools: tools for the model to use if supported. Requires stream to be set to false
   // And correspondingly, tool calls in OllamaChatMessage
 }
@@ -222,11 +234,18 @@ class MinAi extends BaseLLM {
     messages: ChatMessage[],
   ): ChatOptions {
     return {
+      type: "CHAT_WITH_AI",
       model: this._getModel(),
-      messages: messages.map(this._convertMessage).filter(Boolean) as any,
-      options: this._getModelFileParams(options),
-      keep_alive: options.keepAlive ?? 60 * 30, // 30 minutes
-      stream: options.stream,
+      promptObject: { 
+        prompt: messages.map(this._convertMessage).filter(Boolean) as any,
+        isMixed: false,
+        webSearch: false,
+        numOfSite: 0,
+        maxWord: 200
+      }
+      // options: this._getModelFileParams(options),
+      // keep_alive: options.keepAlive ?? 60 * 30, // 30 minutes
+      // stream: options.stream,
       // format: options.format, // Not currently in base completion options
     };
   }
@@ -237,13 +256,13 @@ class MinAi extends BaseLLM {
     suffix?: string,
   ): GenerateOptions {
     return {
-      model: this._getModel(),
+      // model: this._getModel(),
       prompt,
-      suffix,
-      raw: options.raw,
-      options: this._getModelFileParams(options),
-      keep_alive: options.keepAlive ?? 60 * 30, // 30 minutes
-      stream: options.stream,
+      // suffix,
+      // raw: options.raw,
+      // options: this._getModelFileParams(options),
+      // keep_alive: options.keepAlive ?? 60 * 30, // 30 minutes
+      // stream: options.stream,
       // Not supported yet: context, images, system, template, format
     };
   }
@@ -303,11 +322,11 @@ class MinAi extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage> {
-    const response = await this.fetch(this.getEndpoint("api/conversation"), {
+    const response = await this.fetch(this.getEndpoint("api/features?isStreaming=true"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
-        Authorization: `Bearer ${this.apiKey}`,
+        "API-KEY": `${this.apiKey}`,
       },
       body: JSON.stringify(this._getChatOptions(options, messages)),
       signal,
