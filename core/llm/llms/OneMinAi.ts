@@ -321,7 +321,8 @@ class OneMinAi extends BaseLLM {
     signal: AbortSignal,
     options: CompletionOptions,
   ): AsyncGenerator<ChatMessage> {
-    const response = await this.fetch(this.getEndpoint("api/features?isStreaming=true"), {
+    console.log( JSON.stringify(this._getChatOptions(options, messages)) );
+    const response = await this.fetch(this.getEndpoint("api/features"), {
       method: "POST",
       headers: {
         "Content-Type": "application/json",
