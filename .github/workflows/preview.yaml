@@ -1,8 +1,6 @@
 name: Publish Preview Extension
 
-on:
-  release:
-    types: [prereleased]
+on: push
 
 jobs:
   check_release_name:
