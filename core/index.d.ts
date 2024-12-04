@@ -1001,6 +1001,7 @@ export type EmbeddingsProviderName =
   | "deepinfra"
   | "nvidia"
   | "1min"
+  | "1min"
   | "voyage"
   | "mistral"
   | "nebius"
